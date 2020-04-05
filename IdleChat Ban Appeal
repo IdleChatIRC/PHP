@@ -1,0 +1,54 @@
+<?php
+$banReason = array(
+ 1 => "Flooding will not be tolerated.",
+ 2 => "Spam/Trojan/DCC Bots are not permitted on IdleChat.",
+ 3 => "You have displayed conduct that is not suitable for the desired environment.",
+ 4 => "Attempting to evade a ban is a serious infraction and will only result in a longer ban!",
+ 5 => "Hate speech is NOT tolerated on IdleChat.",
+ 6 => "Don't PM/Query/DCC/CTCP or /invite anyone without first asking their permission in the channel.",
+ 7 => "Inappropriate or pornographic links displayed in public channels are not tolerated here.",
+ 8 => "The use of an open proxy to connect to the network is not allowed.",
+ 9 => "Your host is listed in a DNS blacklist. This ban is automatic and may be in error.",
+);
+$blacklist = array(
+ 1 => "AHBL DNSBL",
+ 2 => "Sectoor TOR DNSL",
+ 3 => "EFnet DNSBL",
+ 4 => "iPocalypse DNSBL",
+ 5 => "DroneBL DNSBL",
+ 6 => "DNSBlacklist",
+ 7 => "Dan TOR DNSBL",
+ 8 => "AHBL TOR DNSBL",
+ 9 => "ProxyBL DNSBL",
+ 10 => "Abuse.ch DNSBL",
+ 11 => "DamDevil DNSBL",
+ 12 => "Swiftbl DNSBL",
+ 13 => "Abuseat DNSBL",
+);
+ 
+$hostname = gethostbyaddr($_SERVER['REMOTE_ADDR']);
+$reason = 'No reason specified.'; //Default reason.
+$blackL = ' ';
+if(isset($_GET["setby"])) echo "<b>You were banned by:</b> ".htmlentities($_GET["setby"]) ."<br />";
+if(isset($_GET["seton"])) echo "<b>The ban was set on:</b> ".htmlentities($_GET["seton"]) ."<br />";
+if(isset($_GET["time"])) echo "<b>Time length of ban:</b> ".htmlentities($_GET["time"]) ."<br />";
+//Reason - Check if a reason ident is supplied ( ?reason=1 )
+if ( array_key_exists ( 'reason', $_GET ) ) {
+ //Does exist in the array, set the reason to the value of the key.
+ if ( array_key_exists ( $_GET['reason'], $banReason ) ) {
+ $reason = $banReason[$_GET['reason']];
+ } else {
+ $reason = htmlentities ( stripslashes ( $_GET['reason'] ), ENT_QUOTES, 'UTF-8' );
+ }
+}
+echo "<b>Reason you are banned:</b> ".$reason ."<br />";
+if ( array_key_exists ( 'bl', $_GET ) ) {
+ //Does exist in the array, set the reason to the value of the key.
+ if ( array_key_exists ( $_GET['bl'], $blacklist ) ) {
+ $blackL = $blacklist[$_GET['bl']];
+ echo "<b>Your IP address is in the following blacklist:</b> ".$blackL ."<br />";
+ }
+}
+echo "<b>Your current host is:</b> $hostname <br />";
+echo "<b>Your current IP address is:</b> {$_SERVER['REMOTE_ADDR']}";
+?>
